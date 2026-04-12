@@ -9,17 +9,13 @@ import {
 } from "graphql";
 import _ from "lodash";
 
+// ── Services ─────────────────────────────────────────────────────────────────────
+
+import { getUserById } from "../services/user.service";
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 import { User, UserAppContext } from "./types/user";
-
-// making a hard coded list of user
-
-const users = [
-  { id: "1", firstName: "John", age: 30 },
-  { id: "2", firstName: "Jane", age: 25 },
-  { id: "3", firstName: "Alice", age: 28 },
-];
 
 // ── Object Types ──────────────────────────────────────────────────────────────
 
@@ -42,10 +38,8 @@ const userField: GraphQLFieldConfig<unknown, UserAppContext> = {
   // Resolve is where we actually go into our database and fetch the data that we need to return for this field.
   // In this case, we are just returning a dummy user object with the id that was passed in as an argument,
   // and some hardcoded values for the firstName and age fields.
-  resolve: (_parentValue, args): User | undefined => {
-    return _.find(users, {
-      id: args.id,
-    });
+  resolve: async (_parentValue, args): Promise<User | undefined> => {
+    return await getUserById(args.id);
   },
 };
 
