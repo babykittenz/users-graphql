@@ -2,9 +2,6 @@ import {
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLInt,
-  GraphQLNonNull,
-  GraphQLID,
   GraphQLFieldConfig,
 } from "graphql";
 import _ from "lodash";
@@ -12,23 +9,30 @@ import _ from "lodash";
 // ── Services ─────────────────────────────────────────────────────────────────────
 
 import { getUserById } from "../services/user.service";
+import { getCompanyById } from "../services/company.service";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-import { User, UserAppContext } from "./types/user";
+import { User, UserType } from "./types/user";
+import { Company, CompanyType } from "./types/company";
+import { AppContext } from "./types/app";
 
-// ── Object Types ──────────────────────────────────────────────────────────────
+// ── Fields ─────────────────────────────────────────────────────────────
+// We define the fields for our root query here.
+// Each field corresponds to a specific query that clients can use to request data from the server.
 
-export const UserType = new GraphQLObjectType<User, UserAppContext>({
-  name: "User",
-  fields: {
-    id: { type: new GraphQLNonNull(GraphQLID) },
-    firstName: { type: new GraphQLNonNull(GraphQLString) },
-    age: { type: new GraphQLNonNull(GraphQLInt) },
+const companyField: GraphQLFieldConfig<unknown, AppContext> = {
+  type: CompanyType,
+  args: {
+    id: { type: GraphQLString },
   },
-});
+  // Resolve is where we actually go into our database and fetch the data that we need to return for this field.
+  resolve: async (_parentValue, args): Promise<Company | undefined> => {
+    return await getCompanyById(args.id);
+  },
+};
 
-const userField: GraphQLFieldConfig<unknown, UserAppContext> = {
+const userField: GraphQLFieldConfig<unknown, AppContext> = {
   // the user that is returned by this field will be of type UserType
   type: UserType,
   // if you give me an id, I will return a user with that id, and some dummy data for the other fields
@@ -49,10 +53,11 @@ const userField: GraphQLFieldConfig<unknown, UserAppContext> = {
 // It specifies the available queries that clients can execute to retrieve data from the server.
 // Each field in the root query corresponds to a specific query that clients can use to request data,
 // and it defines the structure of the response that clients will receive when they execute that query.
-const QueryType = new GraphQLObjectType<unknown, UserAppContext>({
+const QueryType = new GraphQLObjectType<unknown, AppContext>({
   name: "RootQueryType",
   fields: {
     user: userField,
+    company: companyField,
   },
 });
 

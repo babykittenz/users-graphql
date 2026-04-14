@@ -1,39 +1,39 @@
 import {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLInt,
   GraphQLNonNull,
   GraphQLID,
+  GraphQLList,
 } from "graphql";
 import _ from "lodash";
 
 // ── Services ─────────────────────────────────────────────────────────────────────
 
-import { getCompanyById } from "../../services/company.service";
+import { getUsersForCompany } from "../../services/company.service";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-import { Company, CompanyType } from "./company";
+import { User, UserType } from "./user";
 import { AppContext } from "./app";
 
-export interface User {
+export interface Company {
   id: string;
-  firstName: string;
-  age: number;
-  companyId: string;
+  name: string;
+  description: string;
+  users: User[];
 }
 
-export const UserType: GraphQLObjectType<User, AppContext> =
-  new GraphQLObjectType<User, AppContext>({
-    name: "User",
+export const CompanyType: GraphQLObjectType<Company, AppContext> =
+  new GraphQLObjectType<Company, AppContext>({
+    name: "Company",
     fields: () => ({
       id: { type: new GraphQLNonNull(GraphQLID) },
-      firstName: { type: new GraphQLNonNull(GraphQLString) },
-      age: { type: new GraphQLNonNull(GraphQLInt) },
-      company: {
-        type: new GraphQLNonNull(CompanyType),
-        resolve: async (parentValue): Promise<Company | undefined> => {
-          return await getCompanyById(parentValue.companyId);
+      name: { type: new GraphQLNonNull(GraphQLString) },
+      description: { type: new GraphQLNonNull(GraphQLString) },
+      users: {
+        type: new GraphQLNonNull(new GraphQLList(UserType)),
+        resolve: async (parentValue): Promise<User[] | undefined> => {
+          return await getUsersForCompany(parentValue.id);
         },
       },
     }),

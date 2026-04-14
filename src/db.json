@@ -3,17 +3,44 @@
         {
             "id": "1",
             "firstName": "Little John",
-            "age": 30
+            "age": 30,
+            "companyId": "1"
         },
         {
             "id": "2",
             "firstName": "Jane",
-            "age": 25
+            "age": 25,
+            "companyId": "2"
         },
         {
             "id": "3",
             "firstName": "Alice",
-            "age": 28
+            "age": 28,
+            "companyId": "1"
+        },
+        {
+            "id": "4",
+            "firstName": "Bob",
+            "age": 35,
+            "companyId": "2"
+        },
+        {
+            "id": "5",
+            "firstName": "Charlie",
+            "age": 22,
+            "companyId": "1"
+        }
+    ],
+    "companies": [
+        {
+            "id": "1",
+            "name": "Acme Inc.",
+            "description": "A company that sells everything"
+        },
+        {
+            "id": "2",
+            "name": "Globex Corporation",
+            "description": "A company that sells everything else"
         }
     ]
 }
