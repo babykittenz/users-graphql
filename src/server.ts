@@ -18,7 +18,7 @@ async function startServer() {
   await server.start();
 
   app.use(cors());
-  app.use(express.json()); // ✅ instead of body-parser
+  app.use(express.json());
 
   app.use("/graphql", expressMiddleware(server));
 

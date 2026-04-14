@@ -20,7 +20,7 @@ export interface Company {
   id: string;
   name: string;
   description: string;
-  users: User[];
+  users?: User[];
 }
 
 export const CompanyType: GraphQLObjectType<Company, AppContext> =
@@ -31,7 +31,7 @@ export const CompanyType: GraphQLObjectType<Company, AppContext> =
       name: { type: new GraphQLNonNull(GraphQLString) },
       description: { type: new GraphQLNonNull(GraphQLString) },
       users: {
-        type: new GraphQLNonNull(new GraphQLList(UserType)),
+        type: new GraphQLList(UserType),
         resolve: async (parentValue): Promise<User[] | undefined> => {
           return await getUsersForCompany(parentValue.id);
         },
