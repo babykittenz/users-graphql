@@ -1,9 +1,4 @@
-import {
-  GraphQLString,
-  GraphQLNonNull,
-  GraphQLFieldConfig,
-  GraphQLInt,
-} from "graphql";
+import { GraphQLString, GraphQLNonNull, GraphQLFieldConfig } from "graphql";
 
 // Services
 import { add, deleteById, update } from "../../services/user.service";
@@ -16,7 +11,12 @@ import { AppContext } from "../types/app";
 // and updating users. Each field specifies the type of data it returns, the arguments it accepts,
 // and the resolver function that performs the actual operation using the services defined in the user service.
 
-export const addUser: GraphQLFieldConfig<unknown, AppContext> = {
+// mutations
+export const addUser: GraphQLFieldConfig<
+  unknown,
+  AppContext,
+  { firstName: string; age: string }
+> = {
   type: UserType,
   args: {
     firstName: { type: new GraphQLNonNull(GraphQLString) },
@@ -27,7 +27,7 @@ export const addUser: GraphQLFieldConfig<unknown, AppContext> = {
     _parentValue,
     { firstName, age }: { firstName: string; age: string },
   ): Promise<User> => {
-    return await add(firstName, parseInt(age));
+    return await add(firstName, age);
   },
 };
 
@@ -46,7 +46,7 @@ export const editUser: GraphQLFieldConfig<unknown, AppContext> = {
   args: {
     id: { type: new GraphQLNonNull(GraphQLString) },
     firstName: { type: GraphQLString },
-    age: { type: GraphQLInt }, // <-- GraphQLInt instead of GraphQLString
+    age: { type: GraphQLString },
     companyId: { type: GraphQLString },
   },
   resolve: async (

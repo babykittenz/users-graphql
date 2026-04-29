@@ -1,7 +1,8 @@
 import { GraphQLObjectType } from "graphql";
 
-// Fields
-import { addUser, deleteUser, editUser } from "./user.fields";
+// Mutations
+import { addUser, deleteUser, editUser } from "./user.mutations";
+import { deleteCompany } from "./company.mutations";
 
 export const mutation = new GraphQLObjectType({
   name: "RootMutation",
@@ -9,5 +10,6 @@ export const mutation = new GraphQLObjectType({
     addUser,
     deleteUser,
     editUser,
+    deleteCompany,
   },
 });

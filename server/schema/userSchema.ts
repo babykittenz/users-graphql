@@ -12,7 +12,7 @@ import { mutation } from "./mutations/mutations";
 // We define the fields for our root query here.
 // Each field corresponds to a specific query that clients can use to request data from the server.
 
-import { companyField } from "./queries/company.fields";
+import { companyField, companiesField } from "./queries/company.fields";
 import { userField } from "./queries/user.fields";
 
 // ── Root Query ────────────────────────────────────────────────────────────────
@@ -26,6 +26,7 @@ const query = new GraphQLObjectType<unknown, AppContext>({
   fields: {
     user: userField,
     company: companyField,
+    companies: companiesField,
   },
 });
 

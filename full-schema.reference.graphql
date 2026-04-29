@@ -1,0 +1,218 @@
+# ── University ────────────────────────────────────────────────────────────────
+# Top-level entity. One per partner site.
+
+type University {
+  id: ID!
+  name: String!
+  slug: String!
+  description: String
+  logoUrl: String
+  heroImageUrl: String
+  contact: ContactInfo
+  colleges: [College!]!
+  programs: [Program!]!
+  pages: [Page!]!
+  testimonials: [Testimonial!]!
+  announcements: [Announcement!]!
+}
+
+# ── Academic Structure ────────────────────────────────────────────────────────
+
+type College {
+  id: ID!
+  name: String!
+  slug: String!
+  description: String
+  departments: [Department!]!
+  programs: [Program!]!
+}
+
+type Department {
+  id: ID!
+  name: String!
+  slug: String!
+  college: College!
+  programs: [Program!]!
+  faculty: [FacultyMember!]!
+}
+
+type Program {
+  id: ID!
+  name: String!
+  slug: String!
+  degree: DegreeType! # BACHELORS, MASTERS, ASSOCIATE, CERTIFICATE, DOCTORATE
+  format: ProgramFormat! # ONLINE, ON_CAMPUS, HYBRID
+  description: String
+  highlights: [String!]!
+  outcomes: [String!]! # career outcomes / what you'll learn bullets
+  tuition: TuitionInfo
+  duration: String # "4 years", "18 months"
+  creditHours: Int
+  concentration: String
+  startDates: [String!]!
+  applicationDeadline: String
+  department: Department
+  college: College!
+  relatedPrograms: [Program!]!
+  faqs: [FAQ!]!
+  testimonials: [Testimonial!]!
+  ctaLabel: String # "Request Info", "Apply Now"
+  ctaUrl: String
+}
+
+enum DegreeType {
+  ASSOCIATE
+  BACHELORS
+  MASTERS
+  DOCTORATE
+  CERTIFICATE
+  POST_BACHELORS_CERTIFICATE
+  POST_MASTERS_CERTIFICATE
+}
+
+enum ProgramFormat {
+  ONLINE
+  ON_CAMPUS
+  HYBRID
+}
+
+# ── People ────────────────────────────────────────────────────────────────────
+
+type FacultyMember {
+  id: ID!
+  name: String!
+  title: String
+  bio: String
+  imageUrl: String
+  email: String
+  department: Department
+}
+
+# ── Content / CMS ─────────────────────────────────────────────────────────────
+
+type Page {
+  id: ID!
+  title: String!
+  slug: String!
+  template: PageTemplate! # HOME, PROGRAM, LANDING, GENERAL
+  hero: HeroBlock
+  sections: [ContentSection!]!
+  seo: SEOMeta
+  publishedAt: String
+}
+
+enum PageTemplate {
+  HOME
+  PROGRAM_LISTING
+  PROGRAM_DETAIL
+  LANDING
+  ABOUT
+  GENERAL
+}
+
+type ContentSection {
+  id: ID!
+  type: SectionType!
+  heading: String
+  body: String
+  imageUrl: String
+  ctaLabel: String
+  ctaUrl: String
+  items: [ContentItem!]! # for stat blocks, icon lists, card grids
+}
+
+enum SectionType {
+  HERO
+  STAT_BLOCK
+  TESTIMONIAL_CAROUSEL
+  PROGRAM_CARDS
+  ICON_LIST
+  ACCORDION_FAQ
+  RICH_TEXT
+  CTA_BANNER
+}
+
+type ContentItem {
+  id: ID!
+  label: String
+  value: String
+  iconUrl: String
+  description: String
+}
+
+type HeroBlock {
+  heading: String!
+  subheading: String
+  imageUrl: String
+  ctaLabel: String
+  ctaUrl: String
+}
+
+# ── Supporting Types ──────────────────────────────────────────────────────────
+
+type Testimonial {
+  id: ID!
+  quote: String!
+  authorName: String!
+  authorTitle: String
+  authorImageUrl: String
+  program: Program
+}
+
+type FAQ {
+  id: ID!
+  question: String!
+  answer: String!
+}
+
+type Announcement {
+  id: ID!
+  title: String!
+  body: String
+  publishedAt: String!
+  expiresAt: String
+}
+
+type TuitionInfo {
+  inState: Float
+  outOfState: Float
+  perCreditHour: Float
+  currency: String! # "USD"
+  notes: String
+}
+
+type ContactInfo {
+  phone: String
+  email: String
+  address: String
+  city: String
+  state: String
+  zip: String
+}
+
+type SEOMeta {
+  title: String
+  description: String
+  canonicalUrl: String
+  ogImageUrl: String
+}
+
+# ── Queries ───────────────────────────────────────────────────────────────────
+
+type Query {
+  university(slug: String!): University
+
+  programs(
+    universitySlug: String!
+    degree: DegreeType
+    format: ProgramFormat
+    collegeId: ID
+    departmentId: ID
+  ): [Program!]!
+
+  program(universitySlug: String!, programSlug: String!): Program
+
+  page(universitySlug: String!, pageSlug: String!): Page
+
+  college(universitySlug: String!, collegeSlug: String!): College
+}

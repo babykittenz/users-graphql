@@ -1,7 +1,6 @@
 import {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLInt,
   GraphQLNonNull,
   GraphQLID,
 } from "graphql";
@@ -29,7 +28,7 @@ export const UserType: GraphQLObjectType<User, AppContext> =
     fields: () => ({
       id: { type: new GraphQLNonNull(GraphQLID) },
       firstName: { type: new GraphQLNonNull(GraphQLString) },
-      age: { type: new GraphQLNonNull(GraphQLInt) },
+      age: { type: new GraphQLNonNull(GraphQLString) },
       company: {
         type: CompanyType,
         resolve: async (parentValue): Promise<Company | undefined> => {

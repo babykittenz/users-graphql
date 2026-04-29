@@ -1,0 +1,33 @@
+{
+  "users": [
+    {
+      "id": "2",
+      "firstName": "Jane",
+      "age": 25,
+      "companyId": "2"
+    },
+    {
+      "id": "4",
+      "firstName": "Bob",
+      "age": 35,
+      "companyId": "2"
+    }
+  ],
+  "companies": [
+    {
+      "id": "1",
+      "name": "Bobs Burgers",
+      "description": " A company that sells burgers"
+    },
+    {
+      "id": "2",
+      "name": "Globex Corporation",
+      "description": "A company that sells everything else"
+    },
+    {
+      "id": "4",
+      "name": "Hooli",
+      "description": "A company that sells tech products"
+    }
+  ]
+}
